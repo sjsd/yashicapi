@@ -1,2 +1,2 @@
-# yashicapi
-Pyhonscript for Raspberry Pi Camera
+# Yashica Pi
+Pyhonscript for Raspberry Pi Camera. See http://yashicapi.wordpress.com for more details.
