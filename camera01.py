@@ -3,6 +3,10 @@ from datetime import datetime
 from picamera import PiCamera
 from subprocess import call
 import socket
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM) # we want to reference the GPIO by chip number
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP) # shutter is connected to pin 17
 
 REMOTE_SERVER = "www.dropbox.com"
 
@@ -18,7 +22,7 @@ def is_connected():
 
 def take_photo():
     # Filename
-    filename = datetime.now().strftime('%Y%m%d-%H%M%S.jpg')
+    filename = datetime.now().strftime('%Y%m%d-%H%M%S.jpg') # Create filename by year, month, day, hour, minute and second
 
     try:
         print("Start camera")
@@ -36,10 +40,18 @@ def take_photo():
 
 def upload():
     if is_connected() == True:
-        print("Start uploading image")
+        print("Start uploading image(s)")
         call("/home/pi/Dropbox-Uploader/dropbox_uploader.sh -s upload *.jpg /", shell=True)
         print("Done uploading")
 
 
-take_photo()
-upload()
+try:
+    while True: # loop foverver
+        while GPIO.input(18): # wait for the shutter button. Do nothing
+            pass
+        take_photo()
+except KeyboardInterrupt:
+    print("Interrupted")
+
+# take_photo()
+# upload()
