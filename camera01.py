@@ -48,10 +48,10 @@ def upload():
 
 try:
     while True: # loop foverver
-        if(GPIO.input(18) == False):
+        if(GPIO.input(18) == GPIO.LOW):
             take_photo()
             sleep(1)
-        elif(GPIO.input(15) == False):
+        elif(GPIO.input(15) == GPIO.LOW):
             upload()
             sleep(1)
 except KeyboardInterrupt:
